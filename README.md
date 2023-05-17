@@ -1,5 +1,10 @@
 # Angular15App
 
+
+
+### https://stackoverflow.com/questions/67655096/bootstrap-5-form-group-form-row-form-inline-not-working
+
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.8.
 
 ## Development server

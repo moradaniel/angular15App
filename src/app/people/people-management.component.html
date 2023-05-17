@@ -1,0 +1,54 @@
+<div>
+  <people-modal-service-component></people-modal-service-component>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+
+    <div class="container-fluid">
+      <h1>People Management</h1>
+
+      <div class="row">
+        <div class="col-sm-12">
+          <button class="btn btn-primary btn-lg"
+                  (click)="goToAdd()"
+                  (onGoToAdd)="navigateTo('add')"
+          >
+            Add new Person
+          </button>
+        </div>
+      </div>
+      <div class="row mt-4">
+        <div class="col-lg-12 d-flex justify-content-between align-items-center">
+          <div>
+            <h4 class="text-primary">All users in the database!</h4>
+          </div>
+          <div>
+            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addNewUserModal">Add New User</button>
+          </div>
+        </div>
+      </div>
+      <hr>
+
+      <people-list *ngIf="currentView == 'list'"
+                   (onView)="openModalWithComponent($event)"
+                   (onEdit)="openModalWithEditComponent($event)"
+      >
+      </people-list>
+
+
+      <!-- people-add *ngIf="currentView == 'add'"
+                  (onAdded)="navigateTo('list')"
+                  (onCancel)="navigateTo('list')"
+      >
+      </people-add>
+
+      <people-edit *ngIf="currentView == 'edit'"
+                   (onEdited)="navigateTo('list')"
+                   (onCancel)="navigateTo('list')"
+      >
+      </people-edit -->
+
+    </div>
+  </div>
+</div>

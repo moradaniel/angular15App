@@ -1,0 +1,91 @@
+
+<!--
+<h3>Specify the name of the dive site:</h3>
+
+
+<div class="row">
+  <div class="col-sm-6">
+    <input #siteNameBox class="form-control input-lg" type="text"
+           placeholder="site name"
+
+           (keyup)="person.name=siteNameBox.value"
+           (keyup.enter)="editPerson()" />
+  </div>
+</div>
+
+<div class="row" style="margin-top: 12px;">
+  <div class="col-sm-6">
+    <button class="btn btn-success btn"
+            (click)="editPerson()"
+            [disabled]="!person?.name">
+      edit
+    </button>
+    <button class="btn btn-warning btn"
+            (click)="cancel()">
+      Cancel
+    </button>
+  </div>
+</div>
+
+-->
+
+<div>
+  <h2>Person</h2>
+  <hr/>
+  <form>
+    <div class="mb-3">
+      <label for="email" class="col-form-label">Email</label>
+      <input type="text" class="form-control" id="email" placeholder="Email">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="col-form-label">Password</label>
+      <input type="password" class="form-control" id="password" placeholder="Password">
+    </div>
+  </form>
+
+  <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
+
+    <div class="mb-3">
+      <label class="col-form-label" for="name">Name</label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               placeholder="Name"
+               formControlName="name"
+               required
+        >
+
+        <div *ngIf="formErrors['name']" class="alert alert-danger">
+          {{ formErrors['name'] }}
+        </div>
+    </div>
+
+    <!-- div class="mb-3">
+      <label class="form-label" for="password" class="col-sm-2 control-label">Password</label>
+      <div class="col-sm-6">
+        <input type="password"
+               class="form-control"
+               id="password"
+               placeholder="Password"
+               formControlName="password"
+               required
+        >
+        <div *ngIf="formErrors.password" class="alert alert-danger">
+          {{ formErrors.password }}
+        </div>
+      </div>
+    </div -->
+
+    <div class="mb-3">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" class="btn btn-success">Submit</button>
+      </div>
+    </div>
+
+    <div class="col-sm-offset-2 col-sm-10" style="padding-top:20px">
+      <!--span><a href="">New User? Sign up</a></span>|
+      <span><a href="">Forgot Password?</a></span -->
+    </div>
+  </form>
+
+</div>
