@@ -60,6 +60,40 @@
         </div>
     </div>
 
+
+    <!-- https://www.concretepage.com/angular/angular-select-option-reactive-form -->
+    <div class="mb-3">
+      <label class="col-form-label" for="role">Role</label>
+
+      <select class="form-select" id="role" formControlName="role" (change)="onProfileChange()">
+        <option [ngValue]="null" disabled>Choose the role</option>
+        <option *ngFor="let prf of allProfiles" [ngValue]="prf" [selected]="prf.id === this.person.profile!.id">
+          {{ prf.name }}
+        </option>
+      </select>
+
+      <!-- div *ngIf="profile.invalid && loginForm.dirty" class="error">
+        Profile required.
+      </div -->
+
+      <div *ngIf="formErrors['role']" class="alert alert-danger">
+        {{ formErrors['role'] }}
+      </div>
+
+    </div>
+
+
+    <!-- div class="my-2">
+      <label>Tax Rate:</label>
+      <select class="form-select" [value]="taxRate || 0"
+              (change)="taxRate=$any($event).target.value">
+        <option value="0">None</option>
+        <option value="10">10%</option>
+        <option value="20">20%</option>
+        <option value="50">50%</option>
+      </select>
+    </div -->
+
     <!-- div class="mb-3">
       <label class="form-label" for="password" class="col-sm-2 control-label">Password</label>
       <div class="col-sm-6">

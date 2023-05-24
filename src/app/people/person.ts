@@ -10,9 +10,14 @@
 }*/
 
 
-export interface Person {
+import {Profile} from "./profile";
+
+export interface   Person {
   id: number;
   name: string;
+  profile: Profile | null;
+
+  //taxRate: number;
 
     //weight: number;
     //height: number;
@@ -30,21 +35,30 @@ export class PersonImpl implements Person {
 
   id!: number;
   name!: string;
+  //taxRate!: number;
+  //technologies: Technology[];
+  profile: Profile | null = null;
 
   public constructor(
     fields?: {
       id?: number,
-      name?: string/*,
+      name?: string,
+      profile?:Profile
+      /*taxRate?:number,
       address?: string,
       age?: number*/
     }) {
     if (fields) {
       this.id = fields.id || this.id;
       this.name = fields.name || this.name;
+      this.profile = fields.profile || this.profile;
+      //this.taxRate = fields.taxRate || this.taxRate;
      /* this.address = fields.address || this.address;
       this.age = fields.age || this.age;*/
     }
   }
+
+
 }
 
 

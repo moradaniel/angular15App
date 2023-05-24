@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {AccountsResponse} from './accountsresponse';
 import {catchError, retry} from 'rxjs/operators';
+import {EditUserCommand} from "./editUserCommand";
 
 @Injectable()
 export class PeopleService {
@@ -83,7 +84,7 @@ export class PeopleService {
     return person$;
   }
 */
-  saveOrUpdate(person: Person)/*: Observable<Response>*/ {
+  saveOrUpdate(person: EditUserCommand)/*: Observable<Response>*/ {
     // this won't actually work because the StarWars API doesn't
     // is read-only. But it would look like this:
 
