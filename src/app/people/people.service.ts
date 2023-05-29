@@ -8,7 +8,9 @@ import {HttpClient} from '@angular/common/http';
 import {AccountsResponse} from './accountsresponse';
 import {catchError, retry} from 'rxjs/operators';
 import {EditUserCommand} from "./editUserCommand";
+import {PersonDetailsResponseDTO} from "../dto/personDetailsResponseDTO";
 
+import { map, of, switchMap } from 'rxjs';
 @Injectable()
 export class PeopleService {
   // private baseUrl: string = 'http://swapi.co/api';
@@ -65,6 +67,36 @@ export class PeopleService {
     });
   }
 
+  /*get(id: number): Observable<Person> {
+    return this.http.get(`${this.baseUrl}/accounts/${id}`);
+  }*/
+/*
+https://nehalist.io/working-with-models-in-angular/
+
+  getUser(): Observable<User[]> {
+    return this.http.get('/api/user')
+      .map((res: Response) => res.json().response.map((user: User) => new User().deserialize(user)));
+  }*/
+
+
+  /**
+   * 2023 - Book: Aristeidis Bampakos Pablo Deeleman - Learning Angular-Packt.pdf
+   */
+  getPerson(id: number): Observable<Person> {
+    return this.http.get<PersonDetailsResponseDTO>(`${this.baseUrl}/accounts/${id}`).
+    pipe(
+      map(product => this.convertToProduct(product))
+    );
+  }
+
+
+  private convertToProduct(product: PersonDetailsResponseDTO): Person {
+    return {
+      id: product.id,
+      name: product.name,
+      profile: product.roles[0]
+    };
+  }
 
   /*
   get(id: number): Observable<Person> {

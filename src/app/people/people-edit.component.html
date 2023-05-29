@@ -65,9 +65,9 @@
     <div class="mb-3">
       <label class="col-form-label" for="role">Role</label>
 
-      <select class="form-select" id="role" formControlName="role" (change)="onProfileChange()">
+      <select class="form-select" id="role" formControlName="role" [compareWith]="compareFn" (change)="onProfileChange()">
         <option [ngValue]="null" disabled>Choose the role</option>
-        <option *ngFor="let prf of allProfiles" [ngValue]="prf" [selected]="prf.id === this.person.profile!.id">
+        <option [ngValue]="role" *ngFor="let prf of allProfiles" [ngValue]="prf" > <!-- [selected]="isCurrentRole(prf.id)" -->
           {{ prf.name }}
         </option>
       </select>

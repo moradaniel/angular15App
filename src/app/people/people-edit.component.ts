@@ -58,7 +58,12 @@ export class PeopleEditComponent implements OnInit {
 
   constructor(private peopleService: PeopleService, private fb: FormBuilder) {
 
-
+    /*this.peopleService.getPerson(this.person.id)
+      //.pipe(first())
+      .subscribe(x => {
+        this.person = x;
+        //this.loginForm.patchValue(x)
+      });*/
   }
 
 // ----------------------------------------------------------------------------------------
@@ -67,7 +72,7 @@ export class PeopleEditComponent implements OnInit {
   createForm() {
     this.loginForm = this.fb.group({
       name: [this.person.name, Validators.required],
-      role: [this.person.profile, Validators.required]
+      role: [''/*this.person.profile*/, Validators.required]
 
       // ,password: [this.login.password, Validators.required]
     });
@@ -184,6 +189,16 @@ export class PeopleEditComponent implements OnInit {
     // synchronous orders
     // this.orders = this.getOrders();
     // this.form.controls.orders.patchValue(this.orders[0].id);
+
+    //if (!this.isAddMode) {
+      this.peopleService.getPerson(this.person.id)
+        //.pipe(first())
+        .subscribe(x => {
+          this.person = x;
+          this.loginForm.get("role")!.patchValue(x.profile);
+          //this.loginForm.patchValue(x)
+        });
+    //}
   }
 
   getOrders() {
@@ -212,5 +227,13 @@ export class PeopleEditComponent implements OnInit {
       // let profile: Profile|null = this.role.profile;
       console.log('Profile Changed: ' + profile!.name);
     }
+  }
+
+  /*isCurrentRole(id: number) {
+    return id === this.person.profile!.id
+  }*/
+
+  compareFn(c1: any, c2:any): boolean {
+    return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }
