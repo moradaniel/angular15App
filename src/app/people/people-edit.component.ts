@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {of} from "rxjs";
 import {Profile} from "./profile";
 import {EditUserCommand} from "./editUserCommand";
+import {RoleService} from "./role.service";
 
 
 /**
@@ -18,7 +19,7 @@ import {EditUserCommand} from "./editUserCommand";
 @Component({
   selector: 'people-edit',
   templateUrl: './people-edit.component.html'
-  , providers: [PeopleService]
+  , providers: [PeopleService, RoleService]
 })
 export class PeopleEditComponent implements OnInit {
 
@@ -56,7 +57,9 @@ export class PeopleEditComponent implements OnInit {
 
   // public person: Person = new PersonImpl();
 
-  constructor(private peopleService: PeopleService, private fb: FormBuilder) {
+  constructor(private peopleService: PeopleService,
+              private roleService: RoleService,
+              private fb: FormBuilder) {
 
     /*this.peopleService.getPerson(this.person.id)
       //.pipe(first())
@@ -181,14 +184,27 @@ export class PeopleEditComponent implements OnInit {
 
     // async orders
     //https://coryrylan.com/blog/creating-a-dynamic-select-with-angular-forms
-    of(this.getOrders()).subscribe(orders => {
-      this.allProfiles = orders;
+    //of(this.getOrders()).subscribe(orders => {
+    //  this.allProfiles = orders;
       //this.loginForm.controls.orders.patchValue(this.orders[0].id);
-    });
+    //});
+
+    //async roles
+    this.roleService.getAll()
+
+      .subscribe(/*x => {
+        this.person = x;
+        this.loginForm.get("role")!.patchValue(x.profile);
+        //this.loginForm.patchValue(x)*/
+        result=>{
+        this.allProfiles = result.content;
+      }
+      );
 
     // synchronous orders
     // this.orders = this.getOrders();
     // this.form.controls.orders.patchValue(this.orders[0].id);
+
 
     //if (!this.isAddMode) {
       this.peopleService.getPerson(this.person.id)
@@ -229,9 +245,6 @@ export class PeopleEditComponent implements OnInit {
     }
   }
 
-  /*isCurrentRole(id: number) {
-    return id === this.person.profile!.id
-  }*/
 
   compareFn(c1: any, c2:any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
