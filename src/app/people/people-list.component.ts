@@ -1,8 +1,11 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import { Person } from './person';
-import { PeopleService } from './people.service';
+import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Person} from './person';
+import {PeopleService} from './people.service';
 import {ContentFilterPipe} from './content-filter.pipe';
 import {PeopleViewDetailsModalComponent} from './people-view-details-modal.component';
+import {Options} from "../pagination/options";
+import {Observable, Subscription} from "rxjs";
+import {AccountsResponse} from "./accountsresponse";
 
 @Component({
   selector: 'people-list',
@@ -10,10 +13,10 @@ import {PeopleViewDetailsModalComponent} from './people-view-details-modal.compo
   providers: [
     PeopleService
     , ContentFilterPipe
-    ,PeopleViewDetailsModalComponent
+    , PeopleViewDetailsModalComponent
   ]
 })
-export class PeopleListComponent implements OnInit{
+export class PeopleListComponent implements OnInit, OnDestroy {
   private _index = 0;
   people: Person[] = [];
   errorMessage: string = '';
@@ -23,9 +26,26 @@ export class PeopleListComponent implements OnInit{
   @Output() onEdit = new EventEmitter<Person>();
 
 
-  constructor(private peopleService: PeopleService) { }
+  options: Options = {
+    orderBy: 'Name',
+    orderDir: 'ASC',
+    page: 2,
+    search: '',
+    size: 2
+  };
+
+  response: AccountsResponse | null = null;
+  getEmployeesSub: Subscription | null = null;
+
+
+  constructor(private peopleService: PeopleService) {
+  }
 
   ngOnInit() {
+
+
+    this.getEmployees();
+
     /*
     https://stackoverflow.com/questions/35763730/difference-between-constructor-and-ngoninit
     Mostly we use ngOnInit for all the initialization/declaration and avoid stuff to work in the constructor.
@@ -36,9 +56,31 @@ export class PeopleListComponent implements OnInit{
     this.peopleService
       .getAll()
       .subscribe(
-         /* happy path */ p => this.people = p.content,
-         /* error path */ e => this.errorMessage = e,
-         /* onComplete */ () => this.isLoading = false);
+        /* happy path */ p => this.people = p.content,
+        /* error path */ e => this.errorMessage = e,
+        /* onComplete */ () => this.isLoading = false);
+  }
+
+  ngOnDestroy(): void {
+    if (this.getEmployeesSub) {
+      this.getEmployeesSub.unsubscribe();
+    }
+  }
+
+  getEmployees(): void {
+    this.getEmployeesSub = this.peopleService.getEmployees(this.options)
+                          .subscribe(
+                            {
+                              next: (data) => {
+                                //this.people = data.content;
+                                this.response = data
+                              }/*,
+                              error: (err) => {
+                                this.errorMessage = "Username or password is incorrect.";
+                              }*/
+                            }
+
+                          );
   }
 
 
@@ -62,4 +104,40 @@ export class PeopleListComponent implements OnInit{
     //this.people = [];
     this._index = 0;
   }*/
+  search($event: Event) {
+    const text = ($event!.target as HTMLInputElement).value;
+    this.options.search = text;
+    this.options.page = 1;
+    this.getEmployees();
+  }
+
+  size(size: number) {
+    this.options.size = size;
+    this.options.page = 1;
+    this.getEmployees();
+  }
+
+  get numbers(): number[] {
+    //const limit = Math.ceil((this.response && this.response.filtered) / this.options.size);
+    const limit = this.response?.totalPages;
+    return Array.from({ length: limit! }, (_, i) => i + 1);
+    /*
+    const limit = Math.ceil((this.response && this.response.filtered) / this.options.size);
+    return Array.from({ length: limit }, (_, i) => i + 1);*/
+  }
+
+  next() {
+    this.options.page++;
+    this.getEmployees();
+  }
+
+  prev() {
+    this.options.page--;
+    this.getEmployees();
+  }
+
+  to(page: number) {
+    this.options.page = page;
+    this.getEmployees();
+  }
 }

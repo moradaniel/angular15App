@@ -35,7 +35,7 @@
 
   <div class="row mb-2">
     <div class="col-sm-4 col-sm-offset-8">
-    <!-- div class="d-flex ms-auto" -->
+      <!-- div class="d-flex ms-auto" -->
       <input #searchBox class="form-control input-lg"
              placeholder="Search"
              (keyup)="0"/>
@@ -99,7 +99,9 @@
           <h4 class="text-primary">All users in the database!</h4>
         </div>
         <div>
-          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addNewUserModal">Add New User</button>
+          <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#addNewUserModal">Add New
+            User
+          </button>
         </div>
       </div>
     </div>
@@ -128,6 +130,87 @@
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- https://codeomelet.com/posts/baking-pagination-with-angular-and-bootstrap-5 -->  
+  <div class="container my-5">
+    <div class="row">
+      <div class="col">
+        <h1 class="mb-4">Pagination Front to Back</h1>
+
+
+        <!-- controls -->
+        <div class="input-group mb-3">
+
+          <!-- search -->
+          <input type="text" class="form-control" placeholder="Search..." (keydown.enter)="search($event)">
+
+          <!-- size -->
+
+          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false">
+            Size: {{options.size}}
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <button class="dropdown-item" type="button" (click)="size(2)">2</button>
+            </li>
+            <li>
+              <button class="dropdown-item" type="button" (click)="size(10)">10</button>
+            </li>
+            <li>
+              <button class="dropdown-item" type="button" (click)="size(20)">20</button>
+            </li>
+            <li>
+              <button class="dropdown-item" type="button" (click)="size(50)">50</button>
+            </li>
+            <li>
+              <button class="dropdown-item" type="button" (click)="size(100)">100</button>
+            </li>
+          </ul>
+        </div>
+
+        <!-- table -->
+        <div class="card mb-3" *ngIf="response">
+          <div class="card-body">
+            <table class="table" style="table-layout: fixed;">
+              <thead></thead>
+              <tbody>
+              <tr *ngFor="let employee of response.content">
+                <td>{{employee.id}}</td>
+                <td>{{employee.name}}</td>
+                <!-- td>{{employee.Job}}</td>
+                <td>{{employee.Salary | currency:'INR'}}</td>
+                <td>{{employee.Department}}</td -->
+              </tr>
+              <tr *ngIf="!response.totalElements">
+                <td colspan="5" class="text-center p-5">No records found</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- paginator -->
+        <nav *ngIf="numbers.length > 1">
+          <ul class="pagination justify-content-center">
+            <li id="prev" class="page-item" [ngClass]="{ 'disabled': options.page === 1 }">
+              <a class="page-link" href="javascript:void(0)" (click)="prev()">Previous</a>
+            </li>
+            <ng-container *ngIf="response">
+              <li class="page-item" *ngFor="let number of numbers" [ngClass]="{ 'active': options.page === number }">
+                <a class="page-link" href="javascript:void(0)" (click)="to(number)">{{number}}</a>
+              </li>
+            </ng-container>
+            <li id="next" class="page-item" [ngClass]="{ 'disabled': options.page === numbers.length }">
+              <a class="page-link" href="javascript:void(0)" (click)="next()" disabled="true">Next</a>
+            </li>
+          </ul>
+        </nav>
+
       </div>
     </div>
   </div>

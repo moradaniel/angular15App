@@ -1,16 +1,18 @@
-import { Injectable } from '@angular/core';
-import { HttpResponse} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {HttpResponse} from '@angular/common/http';
 import {Observable, Observer, throwError} from 'rxjs';
-import { Person } from './person';
+import {Person} from './person';
 
-import { environment } from '../../environments/environment';
+import {environment} from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
 import {AccountsResponse} from './accountsresponse';
 import {catchError, retry} from 'rxjs/operators';
 import {EditUserCommand} from "./editUserCommand";
 import {PersonDetailsResponseDTO} from "../dto/personDetailsResponseDTO";
 
-import { map, of, switchMap } from 'rxjs';
+import {map, of, switchMap} from 'rxjs';
+import {Options} from "../pagination/options";
+
 @Injectable()
 export class PeopleService {
   // private baseUrl: string = 'http://swapi.co/api';
@@ -28,25 +30,26 @@ export class PeopleService {
 
   getAll2(): Observable<AccountsResponse> {
 
-      return new Observable(observer => {
-        this.http.get<AccountsResponse>(`${this.baseUrl}` + '/accounts')
-                 .subscribe((result) => {
-                   const accountsResponse = result;
-                  /*const response = {
-                    'content' : result.content,
-                    last: true,
-                    totalPages: 20
-                  }
-                   const accountsResponse = new AccountsResponse(response)*/
-                 // do something with result.
-                 observer.next(accountsResponse);
-                 // call complete if you want to close this stream (like a promise)
-                 observer.complete();
-                });
-      });
+    return new Observable(observer => {
+      this.http.get<AccountsResponse>(`${this.baseUrl}` + '/accounts')
+        .subscribe((result) => {
+          const accountsResponse = result;
+          /*const response = {
+            'content' : result.content,
+            last: true,
+            totalPages: 20
+          }
+           const accountsResponse = new AccountsResponse(response)*/
+          // do something with result.
+          observer.next(accountsResponse);
+          // call complete if you want to close this stream (like a promise)
+          observer.complete();
+        });
+    });
 
 
   }
+
 
   getAll(): Observable<AccountsResponse> {
     return new Observable((observer: Observer<AccountsResponse>) => {
@@ -67,16 +70,27 @@ export class PeopleService {
     });
   }
 
+
+  //https://codeomelet.com/posts/baking-pagination-with-angular-and-bootstrap-5
+  getEmployees(options: Options): Observable<AccountsResponse> {
+    const url = `${this.baseUrl}/accounts?pageNumber=${options.page}&pageSize=${options.size}&search=${options.search}&orderBy=${options.orderBy}&orderDir=${options.orderDir}`;
+    return this.http.get<AccountsResponse>(url).pipe(
+      map(response => response)
+    );
+  }
+
+
   /*get(id: number): Observable<Person> {
     return this.http.get(`${this.baseUrl}/accounts/${id}`);
   }*/
-/*
-https://nehalist.io/working-with-models-in-angular/
 
-  getUser(): Observable<User[]> {
-    return this.http.get('/api/user')
-      .map((res: Response) => res.json().response.map((user: User) => new User().deserialize(user)));
-  }*/
+  /*
+  https://nehalist.io/working-with-models-in-angular/
+
+    getUser(): Observable<User[]> {
+      return this.http.get('/api/user')
+        .map((res: Response) => res.json().response.map((user: User) => new User().deserialize(user)));
+    }*/
 
 
   /**
@@ -126,7 +140,7 @@ https://nehalist.io/working-with-models-in-angular/
       return this.http
         .put(`${this.baseUrl}` + '/accounts/' + `${person.id}`, JSON.stringify(person))
         // .map(mapPersons)
-       // .catch(handleError);
+        // .catch(handleError);
         .pipe(
           catchError(handleError)
         );
@@ -137,8 +151,8 @@ https://nehalist.io/working-with-models-in-angular/
         catchError(handleError)
       );
 
-   //   .map(mapPersons)
-      // .catch(handleError);
+    //   .map(mapPersons)
+    // .catch(handleError);
 
   }
 
@@ -197,9 +211,8 @@ function toPerson(r:any): Person{
 }*/
 
 
-
 // this could also be a private method of the component class
-function handleError (error: any) {
+function handleError(error: any) {
   // log error
   // could be something more sofisticated
   const errorMsg = error.message || `Yikes! There was a problem with our hyperdrive device and we couldn't retrieve your data!`;
