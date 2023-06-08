@@ -1,10 +1,10 @@
-import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {Person} from './person';
 import {PeopleService} from './people.service';
 import {ContentFilterPipe} from './content-filter.pipe';
 import {PeopleViewDetailsModalComponent} from './people-view-details-modal.component';
-import {Options} from "../pagination/options";
-import {Observable, Subscription} from "rxjs";
+import {Options, SortDirection} from "../pagination/options";
+import {Subscription} from "rxjs";
 import {AccountsResponse} from "./accountsresponse";
 
 @Component({
@@ -29,7 +29,11 @@ export class PeopleListComponent implements OnInit, OnDestroy {
   options: Options = {
     orderBy: 'Name',
     orderDir: 'ASC',
-    page: 2,
+    sort:{
+      property:'name',
+      direction:SortDirection.ASC
+    },
+    page: 1,
     search: '',
     size: 2
   };
@@ -139,5 +143,26 @@ export class PeopleListComponent implements OnInit, OnDestroy {
   to(page: number) {
     this.options.page = page;
     this.getEmployees();
+  }
+
+  order(by: string) {
+    if (this.options.sort.property === by) {
+      this.options.sort.direction = this.options.sort.direction  === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC;
+    } else {
+      this.options.sort.property = by;
+    }
+    this.getEmployees();
+  }
+
+  by(order: string) {
+    return this.options.sort.property === order;
+  }
+
+  get direction() {
+    return this.options.sort.direction === SortDirection.ASC  ? SortDirection.ASC  : SortDirection.DESC ;
+  }
+
+  isAsc() {
+    return this.options.sort.direction === SortDirection.ASC;
   }
 }

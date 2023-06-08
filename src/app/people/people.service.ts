@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpResponse} from '@angular/common/http';
+import {HttpParams, HttpResponse} from '@angular/common/http';
 import {Observable, Observer, throwError} from 'rxjs';
 import {Person} from './person';
 
@@ -12,6 +12,7 @@ import {PersonDetailsResponseDTO} from "../dto/personDetailsResponseDTO";
 
 import {map, of, switchMap} from 'rxjs';
 import {Options} from "../pagination/options";
+
 
 @Injectable()
 export class PeopleService {
@@ -73,8 +74,25 @@ export class PeopleService {
 
   //https://codeomelet.com/posts/baking-pagination-with-angular-and-bootstrap-5
   getEmployees(options: Options): Observable<AccountsResponse> {
-    const url = `${this.baseUrl}/accounts?pageNumber=${options.page}&pageSize=${options.size}&search=${options.search}&orderBy=${options.orderBy}&orderDir=${options.orderDir}`;
-    return this.http.get<AccountsResponse>(url).pipe(
+    //const url = `${this.baseUrl}/accounts?pageNumber=${options.page}&pageSize=${options.size}&search=${options.search}&orderBy=${options.orderBy}&orderDir=${options.orderDir}`;
+
+
+    const data = {
+      size: `${options.size}`,
+      page: `${options.page}`,
+      sort: '',
+      search:''
+    };
+    if (options.sort) {
+      data.sort = `${options.sort.property},${options.sort.direction}`;
+    }
+    if (options.search) {
+      data.search = options.search;
+    }
+
+    const params = new HttpParams({fromObject: data});
+
+    return this.http.get<AccountsResponse>(`${this.baseUrl}/accounts`, {params: params}).pipe(
       map(response => response)
     );
   }
