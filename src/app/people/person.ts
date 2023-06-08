@@ -9,13 +9,15 @@
     profession?: string;
 }*/
 
+// https://www.barbarianmeetscoding.com/blog/getting-started-with-angular-2-step-by-step-5-forms-and-validation
 
-import {Profile} from "./profile";
+
+import {Role} from "./role";
 
 export interface   Person {
   id: number;
   name: string;
-  profile: Profile | null;
+  roles: Role[] | null;
 
   //taxRate: number;
 
@@ -37,21 +39,18 @@ export class PersonImpl implements Person {
   name!: string;
   //taxRate!: number;
   //technologies: Technology[];
-  profile: Profile | null = null;
+  roles: Role[] | null = null;
 
   public constructor(
-    fields?: {
+    fields?: Person /*{
       id?: number,
       name?: string,
       profile?:Profile
-      /*taxRate?:number,
-      address?: string,
-      age?: number*/
-    }) {
+    }*/) {
     if (fields) {
       this.id = fields.id || this.id;
       this.name = fields.name || this.name;
-      this.profile = fields.profile || this.profile;
+      this.roles = fields.roles || this.roles;
       //this.taxRate = fields.taxRate || this.taxRate;
      /* this.address = fields.address || this.address;
       this.age = fields.age || this.age;*/

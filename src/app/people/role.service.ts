@@ -13,7 +13,7 @@ import {PersonDetailsResponseDTO} from "../dto/personDetailsResponseDTO";
 import {map, of, switchMap} from 'rxjs';
 import {PaginationPage, PaginationPropertySort} from "../pagination/pagination";
 import {RoleDetailsResponseDTO} from "../dto/roleDetailsResponseDTO";
-import {Profile} from "./profile";
+import {Role} from "./role";
 
 @Injectable()
 export class RoleService {
@@ -59,7 +59,7 @@ export class RoleService {
     });
   }*/
 
-  getAll(): Observable<PaginationPage<Profile>> {
+  getAll(): Observable<PaginationPage<Role>> {
     return this.http.get<PaginationPage<RoleDetailsResponseDTO>>(`${this.baseUrl}` + '/roles')
       .pipe(
         map(page => {
@@ -77,7 +77,7 @@ export class RoleService {
               itemsPerPage: page.itemsPerPage
               //sort?: Array<PaginationPropertySort>;*/
 
-            } as PaginationPage<Profile>;
+            } as PaginationPage<Role>;
 
             return pageOfRoles;
           }
@@ -126,7 +126,7 @@ export class RoleService {
   }*/
 
 
-  private convertToRole(role: RoleDetailsResponseDTO): Profile {
+  private convertToRole(role: RoleDetailsResponseDTO): Role {
     return {
       id: role.id,
       name: role.name//,

@@ -32,7 +32,7 @@
 <div>
   <h2>Person</h2>
   <hr/>
-  <form>
+  <!-- form>
     <div class="mb-3">
       <label for="email" class="col-form-label">Email</label>
       <input type="text" class="form-control" id="email" placeholder="Email">
@@ -41,7 +41,7 @@
       <label for="password" class="col-form-label">Password</label>
       <input type="password" class="form-control" id="password" placeholder="Password">
     </div>
-  </form>
+  </form -->
 
   <form class="form-horizontal" (ngSubmit)="onSubmit()" [formGroup]="loginForm">
 
@@ -63,12 +63,12 @@
 
     <!-- https://www.concretepage.com/angular/angular-select-option-reactive-form -->
     <div class="mb-3">
-      <label class="col-form-label" for="role">Role</label>
+      <label class="col-form-label" for="roles">Role</label>
 
-      <select class="form-select" id="role" formControlName="role" [compareWith]="compareFn" (change)="onProfileChange()">
+      <select multiple class="form-select" id="roles" formControlName="roles" [compareWith]="compareFn" (change)="onRolesChange()">
         <option [ngValue]="null" disabled>Choose the role</option>
-        <option [ngValue]="role" *ngFor="let prf of allProfiles" [ngValue]="prf" > <!-- [selected]="isCurrentRole(prf.id)" -->
-          {{ prf.name }}
+        <option [ngValue]="role" *ngFor="let role of allRoles" > <!-- [selected]="isCurrentRole(prf.id)" -->
+          {{ role.name }}
         </option>
       </select>
 
@@ -76,8 +76,8 @@
         Profile required.
       </div -->
 
-      <div *ngIf="formErrors['role']" class="alert alert-danger">
-        {{ formErrors['role'] }}
+      <div *ngIf="formErrors['roles']" class="alert alert-danger">
+        {{ formErrors['roles'] }}
       </div>
 
     </div>
@@ -112,7 +112,7 @@
 
     <div class="mb-3">
       <div class="col-sm-offset-2 col-sm-10">
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button [disabled]="!loginForm.valid" type="submit" class="btn btn-success">Submit</button>
       </div>
     </div>
 

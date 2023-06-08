@@ -1,13 +1,12 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 import {Person, PersonImpl} from './person';
 import {PeopleService} from './people.service';
-import {ContentFilterPipe} from './content-filter.pipe'
-import {PeopleViewDetailsModalComponent} from "./people-view-details-modal.component";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {of} from "rxjs";
-import {Profile} from "./profile";
+
 import {EditUserCommand} from "./editUserCommand";
 import {RoleService} from "./role.service";
+import {Role} from "./role";
 
 
 /**
@@ -29,7 +28,7 @@ export class PeopleEditComponent implements OnInit {
   @Output() onEdited = new EventEmitter();
   @Output() onCancel = new EventEmitter();
 
-  allProfiles: Profile[] | null = null;
+  allRoles: Role[] | null = null;
 
   errorMessage = '';
 
@@ -37,7 +36,7 @@ export class PeopleEditComponent implements OnInit {
   formErrors: { [key: string]: string } = {
     'name': ''/*,
     'password': ''*/,
-    'role': ''
+    'roles': ''
   };
   validationMessages: { [key: string]: { [key: string]: string } } = {
     'name': {
@@ -46,16 +45,13 @@ export class PeopleEditComponent implements OnInit {
     'password': {
       'required': 'Password is required.'
     }*/,
-    'role': {
+    'roles': {
       'required': 'Role is required.'
     }
   };
 
   loginForm!: FormGroup;
 
-  // --------------------
-
-  // public person: Person = new PersonImpl();
 
   constructor(private peopleService: PeopleService,
               private roleService: RoleService,
@@ -75,7 +71,7 @@ export class PeopleEditComponent implements OnInit {
   createForm() {
     this.loginForm = this.fb.group({
       name: [this.person.name, Validators.required],
-      role: [''/*this.person.profile*/, Validators.required]
+      roles: [null, Validators.required]
 
       // ,password: [this.login.password, Validators.required]
     });
@@ -106,24 +102,18 @@ export class PeopleEditComponent implements OnInit {
 
   onSubmit() {
     console.log('Person Name: ' + this.loginForm.get('name')!.value /*+ ', Password: ' + this.loginForm.get('password').value*/);
-    /*let user ={'name':"",
-      'roleIds':[]
-    };*/
-    //this.person.name = this.loginForm.value.name;
 
+    let thePerson: Person = this.loginForm.value;
 
-   // user['name'] = this.loginForm.value.name;
+    let roleIds: number[] = new Array();
 
-    let roleIds:number[] = new Array();
-    roleIds.push(this.loginForm.value.role.id);
-    //user['roleIds'] = roleIds;
+    let selectedRoleIds: number[] = thePerson.roles!.map(x => x.id);
+    roleIds.push(...selectedRoleIds);
 
     let editUserCommand = new EditUserCommand(
       this.person.id,
-      this.loginForm.value.name,
+      thePerson.name,
       roleIds);
-
-    //this.person = this.loginForm.value;
 
     this.peopleService
       //.saveOrUpdate(this.person)
@@ -186,7 +176,7 @@ export class PeopleEditComponent implements OnInit {
     //https://coryrylan.com/blog/creating-a-dynamic-select-with-angular-forms
     //of(this.getOrders()).subscribe(orders => {
     //  this.allProfiles = orders;
-      //this.loginForm.controls.orders.patchValue(this.orders[0].id);
+    //this.loginForm.controls.orders.patchValue(this.orders[0].id);
     //});
 
     //async roles
@@ -196,9 +186,9 @@ export class PeopleEditComponent implements OnInit {
         this.person = x;
         this.loginForm.get("role")!.patchValue(x.profile);
         //this.loginForm.patchValue(x)*/
-        result=>{
-        this.allProfiles = result.content;
-      }
+        result => {
+          this.allRoles = result.content;
+        }
       );
 
     // synchronous orders
@@ -207,13 +197,12 @@ export class PeopleEditComponent implements OnInit {
 
 
     //if (!this.isAddMode) {
-      this.peopleService.getPerson(this.person.id)
-        //.pipe(first())
-        .subscribe(x => {
-          this.person = x;
-          this.loginForm.get("role")!.patchValue(x.profile);
-          //this.loginForm.patchValue(x)
-        });
+    this.peopleService.getPerson(this.person.id)
+      //.pipe(first())
+      .subscribe(x => {
+        this.name!.patchValue(x.name);
+        this.roles!.patchValue(x.roles);
+      });
     //}
   }
 
@@ -225,28 +214,34 @@ export class PeopleEditComponent implements OnInit {
       { id: '4', name: 'order 4' }
     ];*/
     let profiles = [
-      new Profile(2, 'Developer'),
-      new Profile(22, 'Manager'),
-      new Profile(23, 'Director')
+      new Role(2, 'Developer'),
+      new Role(22, 'Manager'),
+      new Role(23, 'Director')
     ]
     return profiles;
   }
 
-  get role() {
-    return this.loginForm.get('role');
+  get roles() {
+    return this.loginForm.get('roles');
   }
 
-  onProfileChange() {
-    if (this.role) {
+  get name() {
+    return this.loginForm.get('name');
+  }
 
-      let profile: Profile = this.role.value;
-      // let profile: Profile|null = this.role.profile;
-      console.log('Profile Changed: ' + profile!.name);
+  onRolesChange() {
+    if (this.roles) {
+
+      let theRoles: Role[] = this.roles.value;
+      for (const theRole of theRoles) {
+        console.log('Role Changed: ' + theRole!.name);
+      }
+
     }
   }
 
 
-  compareFn(c1: any, c2:any): boolean {
+  compareFn(c1: any, c2: any): boolean {
     return c1 && c2 ? c1.id === c2.id : c1 === c2;
   }
 }

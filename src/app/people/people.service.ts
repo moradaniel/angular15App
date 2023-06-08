@@ -126,7 +126,7 @@ export class PeopleService {
     return {
       id: product.id,
       name: product.name,
-      profile: product.roles[0]
+      roles: product.roles
     };
   }
 
