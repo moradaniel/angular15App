@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: angular15-app
+spec:
+  selector:
+    matchLabels:
+      app: angular15-app
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: angular15-app
+    spec:
+      containers:
+        - name: angular15-app
+          image: angular15-app:1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
