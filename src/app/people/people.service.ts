@@ -12,7 +12,10 @@ import {PersonDetailsResponseDTO} from "../dto/personDetailsResponseDTO";
 
 import {map, of, switchMap} from 'rxjs';
 import {Options} from "../pagination/options";
+import {AppComponent} from "../app.component";
+import {Environment} from "../environment.interface";
 
+declare let __config: Environment;
 
 @Injectable()
 export class PeopleService {
@@ -24,7 +27,9 @@ export class PeopleService {
   /*constructor(private http: HttpService){
   }*/
 
-  baseUrl: string = environment.backend.baseURL;
+  //baseUrl: string = environment.backend.baseURL;
+  //baseUrl: string = AppComponent.component.baseUrl;
+  baseUrl: string = __config.apiUrl;
 
   constructor(private http: HttpClient) {
   }

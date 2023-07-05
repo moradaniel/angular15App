@@ -5,20 +5,21 @@ import { Observable } from 'rxjs';
 import { JwtResponse } from './jwt-response';
 import { AuthLoginInfo } from './login-info';
 import { SignUpInfo } from './signup-info';
-import {environment} from '../../environments/environment';
+import {Environment} from "../environment.interface";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 };
+
+declare let __config: Environment;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  // private loginUrl = 'http://localhost:8082/api/auth/signin';
-  private loginUrl = environment.backend.baseURL + '/auth/signin';
-  private signupUrl = environment.backend.baseURL + '/auth/signup';
+  private loginUrl = __config.apiUrl + '/auth/signin';
+  private signupUrl = __config.apiUrl + '/auth/signup';
 
   constructor(private http: HttpClient) {
   }

@@ -6,7 +6,7 @@ spec:
   selector:
     matchLabels:
       app: angular15-app
-  replicas: 2
+  replicas: 1
   template:
     metadata:
       labels:
@@ -18,3 +18,10 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+
+          env:
+            - name: ENVIRONMENT
+              valueFrom:
+                configMapKeyRef:
+                  name: angular15-app-config
+                  key: ENVIRONMENT

@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: angular15-app-config
+data:
+  ENVIRONMENT: "prod"

@@ -1,0 +1,7 @@
+export const environment = {
+  production: true,
+  backend: {
+    //baseURL:"http://localhost:8082/humanResources-rest/api"
+    baseURL:"http://192.168.49.2:30575/humanResources-rest/api"
+  }
+};

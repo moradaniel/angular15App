@@ -14,11 +14,14 @@ import {map, of, switchMap} from 'rxjs';
 import {PaginationPage, PaginationPropertySort} from "../pagination/pagination";
 import {RoleDetailsResponseDTO} from "../dto/roleDetailsResponseDTO";
 import {Role} from "./role";
+import {Environment} from "../environment.interface";
+
+declare let __config: Environment;
 
 @Injectable()
 export class RoleService {
 
-  baseUrl: string = environment.backend.baseURL;
+  baseUrl: string = __config.apiUrl;
 
   constructor(private http: HttpClient) {
   }
