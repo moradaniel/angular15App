@@ -15,12 +15,25 @@ pipeline {
             }
         }
 
-        stage('Deploy to k8s'){
-            steps{
-                script{
-                    kubernetesDeploy (configs: "kubernetes/k8s-configmap.yaml", "kubernetes/deployment.yaml", "kubernetes/service.yaml" )
-                }
+//         stage('Deploy to k8s'){
+//             steps{
+//                 script{
+//                     kubernetesDeploy (configs: "kubernetes/k8s-configmap.yaml", "kubernetes/deployment.yaml", "kubernetes/service.yaml" )
+//                 }
+//             }
+//         }
+
+        stage('List pods') {
+            withKubeConfig([credentialsId: 'minikubeconfig'
+//                             ,
+//                             caCertificate: '<ca-certificate>',
+//                             serverUrl: '<api-server-address>',
+//                             contextName: '<context-name>',
+//                             clusterName: '<cluster-name>',
+//                             namespace: '<namespace>'
+                            ]) {
+              sh 'kubectl get pods'
             }
-        }
+          }
     }
 }
