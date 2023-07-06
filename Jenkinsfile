@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage('List pods') {
+        stage('Deploy to Kubernetes') {
           steps {
             echo '## Starting Kubernetes deployment ##'
             withKubeConfig([credentialsId: 'minikubeconfig']) {
