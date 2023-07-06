@@ -10,7 +10,7 @@ pipeline {
         stage('Build docker image'){
           steps{
                 script{
-                    sh 'docker build -f Dockerfile . -t angular15-app:1.0.001'
+                    sh 'docker build -f Dockerfile . -t angular15-app:1.0.002'
                 }
             }
         }
