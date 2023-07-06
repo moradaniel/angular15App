@@ -8,18 +8,20 @@ pipeline {
         }
 
         stage('Build docker image'){
-            steps{
+          steps{
                 script{
                     sh 'docker build -f Dockerfile . -t angular15-app:1.0'
                 }
             }
         }
 
-
         stage('List pods') {
+          steps {
+            echo '## Starting Kubernetes deployment ##'
             withKubeConfig([credentialsId: 'minikubeconfig']) {
               sh 'kubectl get pods'
             }
           }
+        }
     }
 }
