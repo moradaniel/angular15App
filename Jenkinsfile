@@ -19,7 +19,9 @@ pipeline {
           steps {
             echo '## Starting Kubernetes deployment ##'
             withKubeConfig([credentialsId: 'minikubeconfig']) {
-              sh 'kubectl get pods'
+              sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"'
+              sh 'chmod u+x ./kubectl'
+              sh './kubectl get pods'
             }
           }
         }
