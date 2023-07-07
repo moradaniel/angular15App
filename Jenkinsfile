@@ -1,9 +1,20 @@
 pipeline {
     agent any
     stages{
-        stage ('Git'){
-          steps{
-            git branch:'master', url:'https://github.com/moradaniel/angular15App'
+        //stage ('Git'){
+        //  steps{
+        //    git branch:'master', url:'https://github.com/moradaniel/angular15App'
+        //  }
+        //}
+        stage('Clean Workspace'){
+          steps {
+            cleanWs()
+          }
+        }
+
+        stage('Checkout SCM') {
+          steps {
+           checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/moradaniel/angular15App.git']]])
           }
         }
 
