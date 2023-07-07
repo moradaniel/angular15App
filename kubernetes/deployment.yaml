@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: angular15-app
-          image: angular15-app:1.0.002
+          image: moradaniel/angular15-app:1.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
