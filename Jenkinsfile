@@ -1,5 +1,10 @@
 pipeline {
     agent any
+
+      environment {
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub_access_token')
+      }
+
     stages{
         //stage ('Git'){
         //  steps{
@@ -21,10 +26,25 @@ pipeline {
         stage('Build docker image'){
           steps{
                 script{
-                    sh 'docker build -f Dockerfile . -t angular15-app:1.0.002'
+                    sh 'docker build -f Dockerfile . -t moradaniel/angular15-app:1.0.002'
                 }
             }
         }
+
+
+        stage('Login') {
+          steps {
+              sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+          }
+        }
+
+        stage('Push image to Docker Hub') {
+          steps {
+               sh 'docker push moradaniel/angular15-app:1.0.002'
+          }
+        }
+
+
 
         stage('Deploy to Kubernetes') {
           steps {
@@ -38,5 +58,13 @@ pipeline {
             }
           }
         }
+
+
     }
+
+      post {
+        always {
+          sh 'docker logout'
+        }
+      }
 }

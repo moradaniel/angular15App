@@ -1,8 +1,36 @@
 # Angular15App
 
 
+docker build -f Dockerfile . -t angular15-app
+
+
+TODO
+Users Pagination
+Form validation
+Unsubscribe in ngDestroy method
+Create user
+Loading overly spinner
+
+-remove sequence oracle cache
+-Fix in memory sort Hibernate warning
+Add tests on server and frontend
+Dockerize
+Add Swagger docs
+
+Done
+
+
 
 ### https://stackoverflow.com/questions/67655096/bootstrap-5-form-group-form-row-form-inline-not-working
+
+
+### Pagination
+
+https://codeomelet.com/posts/baking-pagination-with-angular-and-bootstrap-5
+
+
+
+
 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.8.
