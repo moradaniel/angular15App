@@ -54,7 +54,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
    * In the case of a dynamically loaded component and in order for a ComponentFactory to be
    * generated, the component must also be added to the module’s entryComponents:
    */
-  entryComponents: [PeopleViewDetailsModalComponent,
-                    PeopleEditModalComponent]
+  //entryComponents: [PeopleViewDetailsModalComponent,
+  //                  PeopleEditModalComponent]
 })
 export class PeopleModule { }
