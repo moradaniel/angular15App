@@ -15,6 +15,9 @@ import { PmComponent } from './pm/pm.component';
 import { httpInterceptorProviders } from './auth/auth-interceptor';
 import {PeopleModule} from './people/people.module';
 import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
+import {NgSelectModule} from "@ng-select/ng-select";
+import { CreditsSummaryComponent } from './credits/credits-summary/credits-summary.component';
+
 
 @NgModule({
   declarations: [
@@ -24,7 +27,8 @@ import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
     RegisterComponent,
     HomeComponent,
     AdminComponent,
-    PmComponent
+    PmComponent,
+    CreditsSummaryComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,8 @@ import { SharedBootstrapModule } from './shared/shared-bootstrap.module';
     ReactiveFormsModule,
     HttpClientModule,
     PeopleModule,
-    SharedBootstrapModule
+    SharedBootstrapModule,
+    NgSelectModule
   ],
   providers: [httpInterceptorProviders],
   bootstrap: [AppComponent]
