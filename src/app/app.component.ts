@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { TokenStorageService } from './auth/token-storage.service';
+import {Component, OnInit} from '@angular/core';
+import {TokenStorageService} from './auth/token-storage.service';
+import {Department} from "./department/department";
+import {DepartmentService} from "./department/department.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-root',
@@ -11,7 +14,17 @@ export class AppComponent implements OnInit {
   private roles = new Array<string>();
   public authority!: string;
 
-  constructor(private tokenStorage: TokenStorageService) { }
+
+  selectedDepartment: Department | null = null;
+  departments!: Department[];
+
+
+  constructor(private tokenStorage: TokenStorageService,
+              private departmentService: DepartmentService,
+              private router: Router) {
+
+  }
+
 
   ngOnInit() {
     if (this.tokenStorage.getToken()) {
@@ -28,13 +41,45 @@ export class AppComponent implements OnInit {
           return false;
         }
         this.authority = 'user';
+
+        /*this.cars = [
+          { id: 1, name: 'Volvo' },
+          { id: 2, name: 'Saab' },
+          { id: 3, name: 'Opel' },
+          { id: 4, name: 'Audi' },
+        ];*/
+        this.departmentService.findAvailableDepartmentsForAccount(this.tokenStorage.getUsername()!)
+
+          .subscribe(/*x => {
+        this.person = x;
+        this.loginForm.get("role")!.patchValue(x.profile);
+        //this.loginForm.patchValue(x)*/
+            result => {
+              this.departments = result.content;
+            }
+          );
+
         return true;
       });
+
+
+      this.departmentService.currentDepartment$.subscribe(
+        department => {
+          this.selectedDepartment = department;
+          this.router.navigate(['/credits-summary']);
+        }
+      );
     }
   }
 
-  canManageUsers(): Boolean{
+  canManageUsers(): Boolean {
     const canManageUsers = this.roles.includes('SYS_ADMIN');
     return canManageUsers;
+  }
+
+
+  getValues() {
+    console.log(this.selectedDepartment);
+    this.departmentService.updateCurrentDepartment(this.selectedDepartment);
   }
 }
